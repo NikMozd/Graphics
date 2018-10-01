@@ -1,0 +1,19 @@
+D:\Документы\Programs\Комп графика\Lab3\bin\Debug\Lab3.exe.config
+D:\Документы\Programs\Комп графика\Lab3\bin\Debug\Lab3.exe
+D:\Документы\Programs\Комп графика\Lab3\bin\Debug\Lab3.pdb
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.csprojResolveAssemblyReference.cache
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.Form1.resources
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.Properties.Resources.resources
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.csproj.GenerateResource.Cache
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.exe
+D:\Документы\Programs\Комп графика\Lab3\obj\Debug\Lab3.pdb
+C:\Users\mozdo\Desktop\Lab3 - 1б\bin\Debug\Lab3.exe.config
+C:\Users\mozdo\Desktop\Lab3 - 1б\bin\Debug\Lab3.exe
+C:\Users\mozdo\Desktop\Lab3 - 1б\bin\Debug\Lab3.pdb
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.Form1.resources
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.Properties.Resources.resources
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.exe
+C:\Users\mozdo\Desktop\Lab3 - 1б\obj\Debug\Lab3.pdb
