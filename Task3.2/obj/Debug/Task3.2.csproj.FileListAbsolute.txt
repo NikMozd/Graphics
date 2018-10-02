@@ -11,3 +11,16 @@ C:\Users\mozdo\Desktop\Task3.2\obj\Debug\Task3.2.pdb
 C:\Users\mozdo\Desktop\Task3.2\bin\Debug\System.ValueTuple.dll
 C:\Users\mozdo\Desktop\Task3.2\bin\Debug\System.ValueTuple.xml
 C:\Users\mozdo\Desktop\Task3.2\obj\Debug\Task3.2.csproj.CopyComplete
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\bin\Debug\Task3.2.exe.config
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\bin\Debug\Task3.2.exe
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\bin\Debug\Task3.2.pdb
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\bin\Debug\System.ValueTuple.dll
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\bin\Debug\System.ValueTuple.xml
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3._2.Form1.resources
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3._2.Properties.Resources.resources
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.csproj.CopyComplete
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.exe
+C:\Users\mozdo\Desktop\Git Portable\Graphics\Task3.2\obj\Debug\Task3.2.pdb

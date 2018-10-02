@@ -75,6 +75,7 @@ namespace Task3._2
             } while (color == Color.FromArgb(rgbValues[bmpData.Stride * y + 3 * x + 2],
                 rgbValues[bmpData.Stride * y + 3 * x + 1],
                 rgbValues[bmpData.Stride * y + 3 * x]));
+            --x;
 
             // Начинаем выделять границу
             LinkedList<Tuple<int, int>> border = new LinkedList<Tuple<int, int>>();
@@ -85,10 +86,10 @@ namespace Task3._2
             // Вторая точка границы
             // 0 - вниз, далее - против часовой стрелки
             int direction = 0;
-            for (; ; ++direction)
+            for (; ; direction += 2)
             {
-                if (direction == 8)
-                    return;
+                //if (direction == 8)
+                  //  return;
                 var next = find_next(last.Value, direction);
                 int xx = next.Item1;
                 int yy = next.Item2;
@@ -104,14 +105,14 @@ namespace Task3._2
             }
 
             // Все остальные точки
-            //while (first.Value != last.Value)
-            for (int k = 0; k < 10000; ++k)
+            while (first.Value.Item1 != last.Value.Item1 || first.Value.Item2 != last.Value.Item2)
+            //for (int k = 0; k < 100; ++k)
             {
                 int nd = (direction + 6) % 8;
-                for (; ; ++nd)
+                for (; ; nd += 2)
                 {
-                    if (nd - 8 == (direction + 6) % 8)
-                        return;
+                    //if (nd - 8 == (direction + 6) % 8)
+                    //    return;
                     var new_dir = nd % 8;
                     if (nd == (direction + 4) % 8)
                         continue;
@@ -158,10 +159,9 @@ namespace Task3._2
             {
                 var xx = first.Value.Item1;
                 var yy = first.Value.Item2;
-                //label4.Text += '(' + xx.ToString() + ',' + yy.ToString() + ") ";
                 rgbValues[bmpData.Stride * yy + 3 * xx + 2] = red;
                 rgbValues[bmpData.Stride * yy + 3 * xx + 1] = green;
-                rgbValues[bmpData.Stride * yy + 3 * xx] = blue;
+                rgbValues[bmpData.Stride * yy + 3 * xx + 0] = blue;
                 first = first.Next;
             }
 
@@ -192,8 +192,8 @@ namespace Task3._2
             {
                 var xx = first.Value.Item1;
                 var yy = first.Value.Item2;
-                label4.Text += '(' + xx.ToString() + ',' + yy.ToString() + ") ";
-                bmp.SetPixel(xx, yy, Color.FromArgb(red, green, blue));
+                bmp.SetPixel(xx * pictureBox1.Width / bmpData.Width, yy * pictureBox1.Height / bmpData.Height, 
+                    Color.FromArgb(red, green, blue));
                 first = first.Next;
             }
             pictureBox1.Refresh();*/
@@ -209,16 +209,15 @@ namespace Task3._2
             // Unlock the bits.
             bmp.UnlockBits(bmpData);
 
-            int i = 0;
-            for (int counter = 0; counter < rgbValues.Length; counter += 3)
+            /*int i = 0;
+            for (int counter = 0; counter < bmp.Width * bmp.Height * 3; counter += 3)
             {
                 bmp.SetPixel(i % bmp.Width, i / bmp.Width,
                     Color.FromArgb(rgbValues[counter + 2], rgbValues[counter + 1], rgbValues[counter]));
                 i++;
-
             }
-            pictureBox1.Refresh();
-    }
+            pictureBox1.Refresh();*/
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
