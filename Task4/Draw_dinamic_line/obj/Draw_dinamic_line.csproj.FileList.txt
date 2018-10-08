@@ -1,0 +1,8 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Draw_dinamic_line.Properties.Resources.resources
+obj\Debug\Draw_dinamic_line.csproj.GenerateResource.Cache
+obj\Debug\Draw_dinamic_line.Form1.resources
+bin\Debug\Draw_dinamic_line.exe
+bin\Debug\Draw_dinamic_line.pdb
+obj\Debug\Draw_dinamic_line.exe
+obj\Debug\Draw_dinamic_line.pdb

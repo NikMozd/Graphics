@@ -1,0 +1,17 @@
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.exe
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.pdb
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\bin\Debug\Draw_dinamic_line.exe
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\bin\Debug\Draw_dinamic_line.pdb
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.csprojResolveAssemblyReference.cache
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.Form1.resources
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.Properties.Resources.resources
+C:\Users\Anastasia\Downloads\Draw_dinamic_line\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.csproj.GenerateResource.Cache
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\bin\Debug\Draw_dinamic_line.exe
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\bin\Debug\Draw_dinamic_line.pdb
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.Form1.resources
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.Properties.Resources.resources
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.exe
+C:\Users\mozdo\Desktop\Task4\Draw_dinamic_line\obj\Debug\Draw_dinamic_line.pdb
