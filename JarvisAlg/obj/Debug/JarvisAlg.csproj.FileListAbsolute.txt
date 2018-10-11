@@ -1,0 +1,10 @@
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\bin\Debug\JarvisAlg.exe.config
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\bin\Debug\JarvisAlg.exe
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\bin\Debug\JarvisAlg.pdb
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.Form1.resources
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.Properties.Resources.resources
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.exe
+C:\Users\mozdo\Desktop\Git Portable\Graphics\JarvisAlg\obj\Debug\JarvisAlg.pdb
