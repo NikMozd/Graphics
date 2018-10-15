@@ -1,0 +1,19 @@
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.exe.config
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.exe
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.pdb
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.csprojResolveAssemblyReference.cache
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.Form1.resources
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.Properties.Resources.resources
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.csproj.GenerateResource.Cache
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.exe
+c:\users\anastasia\documents\visual studio 2015\Projects\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.pdb
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.exe.config
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.exe
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\bin\Debug\MidpointDisplacement.pdb
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.Form1.resources
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.Properties.Resources.resources
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.exe
+C:\Users\mozdo\Desktop\MidpointDisplacement\MidpointDisplacement\obj\Debug\MidpointDisplacement.pdb
