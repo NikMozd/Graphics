@@ -1,0 +1,2 @@
+X 22,5 up random
+X F[[-X]+X]
