@@ -1,0 +1,9 @@
+D:\Документы\Programs\Комп графика\Lab6\bin\Debug\Lab6.exe.config
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.csprojResolveAssemblyReference.cache
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.Form1.resources
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.Properties.Resources.resources
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.csproj.GenerateResource.Cache
+D:\Документы\Programs\Комп графика\Lab6\bin\Debug\Lab6.exe
+D:\Документы\Programs\Комп графика\Lab6\bin\Debug\Lab6.pdb
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.exe
+D:\Документы\Programs\Комп графика\Lab6\obj\Debug\Lab6.pdb
