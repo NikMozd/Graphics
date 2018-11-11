@@ -194,6 +194,16 @@ namespace Lab6
             return Pentagon;
         }
 
+        public Point3d[] GetPoints()
+        {
+            Point3d[] res = new Point3d[edges.Length];
+            for (int i = 0; i < res.Length; ++i)
+            {
+                res[i] = edges[i].First;
+            }
+            return res;
+        }
+
         public IFigure Clone()
         {
             Face res = new Face();
@@ -560,5 +570,224 @@ namespace Lab6
                 return z;
             }
         }
+    }
+
+    class Cam
+    {
+        private Point3d pos;
+        private Point3d view;
+        private Point3d hor;
+        private Point3d vert;
+
+        public Cam(Point3d pos, Point3d view, Point3d hor, Point3d vert)
+        {
+            this.pos = pos;
+            this.view = view;
+            this.hor = hor;
+            this.vert = vert;
+        }
+        public Point3d Pos
+        {
+            get
+            {
+                return pos;
+            }
+        }
+
+        public Point3d View
+        {
+            get
+            {
+                return view;
+            }
+        }
+
+        public Point3d Hor
+        {
+            get
+            {
+                return hor;
+            }
+        }
+
+        public Point3d Vert
+        {
+            get
+            {
+                return vert;
+            }
+        }
+
+    }
+
+    class Zbuffer
+    {
+        public Zbuffer(int w, int h)
+        {
+            depth = new double[w, h];
+            color = new byte[w, h];
+            for (int i = 0; i < w; ++i)
+            {
+                for (int j = 0; j < h; ++j)
+                {
+                    depth[i, j] = double.MinValue;
+                    color[i, j] = 255;
+                }
+            }
+            R = new Random();
+        }
+
+        public void ProcessFace(Face face)
+        {
+            byte COLOR = (byte)R.Next(8);
+            
+            Point3d[] points = face.GetPoints();
+            int pointsNum = points.Length;
+
+            Point[] pixelPoints = Array.ConvertAll(points, new Converter<Point3d,Point>(x => x.To2d()));
+            int indLeft = 0, indRight = 0;
+            for (int i = 0; i < pointsNum; ++i)
+            {
+                if (pixelPoints[indLeft].X > pixelPoints[i].X)
+                {
+                    indLeft = i;
+                }
+                if (pixelPoints[indRight].X < pixelPoints[i].X)
+                {
+                    indRight = i;
+                }
+            }
+
+            int[] topIndices = new int[(indRight > indLeft) ? (indRight - indLeft + 1) : (indRight - indLeft + pointsNum + 1)];
+            int[] bottomIndices = new int[pointsNum + 2 - topIndices.Length];
+            topIndices[0] = indLeft;
+            bottomIndices[0] = indLeft;
+            for (int i = 1; i < topIndices.Length; ++i)
+            {
+                if (topIndices[i - 1] == pointsNum - 1)
+                    topIndices[i] = 0;
+                else
+                    topIndices[i] = topIndices[i - 1] + 1;
+            }
+            for (int i = 1; i < bottomIndices.Length; ++i)
+            {
+                if (bottomIndices[i - 1] == 0)
+                    bottomIndices[i] = pointsNum - 1;
+                else
+                    bottomIndices[i] = bottomIndices[i - 1] - 1;
+            }
+
+            double cTop = (double)(pixelPoints[topIndices[1]].Y - pixelPoints[topIndices[0]].Y) /
+                          (double)(pixelPoints[topIndices[1]].X - pixelPoints[topIndices[0]].X);
+            double cBottom = (double)(pixelPoints[bottomIndices[1]].Y - pixelPoints[bottomIndices[0]].Y) /
+                             (double)(pixelPoints[bottomIndices[1]].X - pixelPoints[bottomIndices[0]].X);
+            if (cTop > cBottom)
+            {
+                var tmp = topIndices;
+                topIndices = bottomIndices;
+                bottomIndices = tmp;
+            }
+
+            int topCnt = 1, bottomCnt = 1, currCol = pixelPoints[indLeft].X;
+            while (topCnt < topIndices.Length && bottomCnt < bottomIndices.Length)
+            {
+                double topRatio = 0, bottomRatio = 0;
+                if ((pixelPoints[topIndices[topCnt]].X - pixelPoints[topIndices[topCnt - 1]].X) == 0)
+                {
+                    topRatio = 1;
+                }
+                else
+                {
+                    topRatio = (double)(currCol - pixelPoints[topIndices[topCnt - 1]].X) / 
+                               (double)(pixelPoints[topIndices[topCnt]].X - pixelPoints[topIndices[topCnt - 1]].X);
+                }
+                if ((pixelPoints[bottomIndices[bottomCnt]].X - pixelPoints[bottomIndices[bottomCnt - 1]].X) == 0)
+                {
+                    bottomRatio = 1;
+                }
+                else
+                {
+                    bottomRatio = (double)(currCol - pixelPoints[bottomIndices[bottomCnt - 1]].X) /
+                                  (double)(pixelPoints[bottomIndices[bottomCnt]].X - pixelPoints[bottomIndices[bottomCnt - 1]].X);
+                }
+
+                int topLimit = (int)(topRatio * pixelPoints[topIndices[topCnt]].Y + (1 - topRatio) * pixelPoints[topIndices[topCnt - 1]].Y);
+                int bottomLimit = (int)(bottomRatio * pixelPoints[bottomIndices[bottomCnt]].Y + (1 - bottomRatio) * pixelPoints[bottomIndices[bottomCnt - 1]].Y);
+
+                double topDepth = topRatio * points[topIndices[topCnt]].X + (1 - topRatio) * points[topIndices[topCnt - 1]].X;
+                double bottomDepth = bottomRatio * points[bottomIndices[bottomCnt]].X + (1 - bottomRatio) * points[bottomIndices[bottomCnt - 1]].X;
+                
+                for (int i = topLimit; i <= bottomLimit; ++i)
+                {
+                    double ratio = 0;
+                    if ((topLimit - bottomLimit) == 0)
+                    {
+                        ratio = 0.5;
+                    }
+                    else
+                    {
+                        ratio = (double)(i - bottomLimit) / (double)(topLimit - bottomLimit);
+                    }
+                    double pDepth = ratio * topDepth + (1 - ratio) * bottomDepth;
+                    if (pDepth > depth[currCol, i])
+                    {
+                        depth[currCol, i] = pDepth;
+                        color[currCol, i] = COLOR;
+                    }
+                }
+
+                ++currCol;
+                if (pixelPoints[topIndices[topCnt]].X < currCol)
+                    ++topCnt;
+                if (pixelPoints[bottomIndices[bottomCnt]].X < currCol)
+                    ++bottomCnt;
+            }
+        }
+
+        public Bitmap GetImage()
+        {
+            Bitmap res = new Bitmap(color.GetLength(0), color.GetLength(1));
+            for (int i = 0; i < color.GetLength(0); ++i)
+            {
+                for (int j = 0; j < color.GetLength(1); ++j)
+                {
+                    res.SetPixel(i, j, color[i, j] == 1 ? Color.Black : Color.White);
+                    switch (color[i, j]) {
+                        case 0:
+                            res.SetPixel(i, j, Color.White);
+                            break;
+                        case 1:
+                            res.SetPixel(i, j, Color.Black);
+                            break;
+                        case 2:
+                            res.SetPixel(i, j, Color.Red);
+                            break;
+                        case 3:
+                            res.SetPixel(i, j, Color.Yellow);
+                            break;
+                        case 4:
+                            res.SetPixel(i, j, Color.Green);
+                            break;
+                        case 5:
+                            res.SetPixel(i, j, Color.DarkBlue);
+                            break;
+                        case 6:
+                            res.SetPixel(i, j, Color.Cyan);
+                            break;
+                        case 7:
+                            res.SetPixel(i, j, Color.Magenta);
+                            break;
+                        default:
+                            res.SetPixel(i, j, Color.Gray);
+                            break;
+                    }
+                }
+            }
+            return res;
+        }
+
+        private double[,] depth;
+        private byte[,] color;
+        private Random R;
     }
 }

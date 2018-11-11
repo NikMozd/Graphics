@@ -101,6 +101,19 @@ namespace Lab6
             return result;
         }
 
+        public static void Transpon(AffineMatrix a)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    double tmp = a[i, j];
+                    a[i, j] = a[j, i];
+                    a[j, i] = tmp;
+                }
+            }
+        }
+
         public static AffineMatrix CreateReflectionMatrix(char axis)
         {
             AffineMatrix result = new AffineMatrix();
@@ -179,6 +192,26 @@ namespace Lab6
             return result;
         }
 
+        public static AffineMatrix CreateViewMatrix(Point3d pos, Point3d view, Point3d hor, Point3d vert)
+        {
+            AffineMatrix res = new AffineMatrix();
+            res[0, 0] = vert.X;
+            res[0, 1] = vert.Y;
+            res[0, 2] = vert.Z;
+            res[1, 0] = hor.X;
+            res[1, 1] = hor.Y;
+            res[1, 2] = hor.Z;
+            res[2, 0] = view.X;
+            res[2, 1] = view.Y;
+            res[2, 2] = view.Z;
+            res[3, 0] = res[3, 1] = res[3, 2] = 0;
+            res[0, 3] = -(pos.X * vert.X + pos.Y * vert.Y + pos.Z * vert.Z);
+            res[1, 3] = -(pos.X * hor.X + pos.Y * hor.Y + pos.Z * hor.Z);
+            res[2, 3] = -(pos.X * view.X + pos.Y * view.Y + pos.Z * view.Z);
+            res[3, 3] = 1;
+            return res;
+        }
+
         public static AffineMatrix operator *(AffineMatrix a, AffineMatrix b)
         {
             AffineMatrix result = new AffineMatrix();
@@ -214,6 +247,22 @@ namespace Lab6
         }
 
         private double[,] matrix;
+
+        internal static AffineMatrix CreatePerspectiveProjectionMatrix(double fov, double zfar, double znear)
+        {
+            double w = 1 / Math.Tan(fov / 2);
+
+            AffineMatrix perspectiveProjectionMatrix = new AffineMatrix();
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    perspectiveProjectionMatrix[i, j] = 0;
+            perspectiveProjectionMatrix[0, 0] = w;
+            perspectiveProjectionMatrix[1, 1] = w;
+            perspectiveProjectionMatrix[2, 2] = zfar / (zfar - znear);
+            perspectiveProjectionMatrix[2, 3] = 1;
+            perspectiveProjectionMatrix[3, 2] = zfar * (-znear) / (zfar - znear);
+            return perspectiveProjectionMatrix;
+        }
     }
 
     class Affine
@@ -345,6 +394,19 @@ namespace Lab6
         public static void OrtographicProjection(Polyhedron ph, char axis)
         {
             AffineMatrix m = AffineMatrix.CreateOrtographicProjectionMatrix(axis);
+            Execute(ph, m);
+        }
+
+        public static void MakeView(Polyhedron ph, Cam cam)
+        {
+            AffineMatrix m = AffineMatrix.CreateViewMatrix(cam.Pos, cam.View, cam.Hor, cam.Vert);
+            Execute(ph, m);
+        }
+
+        public static void MakePerspectiveProjection(Polyhedron ph, double fov, double zfar, double znear)
+        {
+            AffineMatrix m = AffineMatrix.CreatePerspectiveProjectionMatrix(fov, zfar, znear);
+            //AffineMatrix.Transpon(m);
             Execute(ph, m);
         }
     }

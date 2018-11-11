@@ -1,0 +1,9 @@
+C:\Users\Anastasia\Downloads\Task8\bin\Release\Lab6.exe.config
+C:\Users\Anastasia\Downloads\Task8\bin\Release\Lab6.exe
+C:\Users\Anastasia\Downloads\Task8\bin\Release\Lab6.pdb
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Task8.csprojResolveAssemblyReference.cache
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Lab6.Form1.resources
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Lab6.Properties.Resources.resources
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Task8.csproj.GenerateResource.Cache
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Lab6.exe
+C:\Users\Anastasia\Downloads\Task8\obj\Release\Lab6.pdb
