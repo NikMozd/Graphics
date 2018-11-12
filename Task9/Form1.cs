@@ -195,7 +195,10 @@ namespace Lab6
         {
             if (ph == null)
                 return;
-            g.Clear(Color.White);
+            if (checkBox1.Checked)
+                g.Clear(Color.Black);
+            else
+                g.Clear(Color.White);
 
             Point3d.DrawPoint0(g, Color.LimeGreen);
 
@@ -234,6 +237,16 @@ namespace Lab6
             else
             {
                 throw new Exception("Projection error.");
+            }
+
+            if (checkBox1.Checked)
+            {
+                Polyhedron pproj = ph.Clone() as Polyhedron;
+                GouraudShading(pproj);
+                Point p = find_point_screen(new Point3d
+                    (double.Parse(textBox17.Text), double.Parse(textBox18.Text), double.Parse(textBox19.Text)));
+                g.FillRectangle(new SolidBrush(Color.White), p.X - 2, p.Y - 2, 5, 5);
+                return;
             }
 
             proj.Draw(g, Color.Black);
@@ -853,6 +866,445 @@ namespace Lab6
             ph.center = new Point3d((X[1] - X[0]) / 2, (Y[1] - Y[0]) / 2, fun((X[1] - X[0]) / 2, (Y[1] - Y[0]) / 2));
 
             Plot();
+        }
+
+        class Point3dCompare : IEqualityComparer<Point3d>
+        {
+            public bool Equals(Point3d p1, Point3d p2)
+            {
+                return p1.X == p2.X && p1.Y == p2.Y && p1.Z == p2.Z;
+            }
+
+            public int GetHashCode(Point3d p)
+            {
+                return p.X.GetHashCode() ^ p.Y.GetHashCode() ^ p.Z.GetHashCode();
+            }
+        }
+
+        private Point find_point_screen(Point3d p)
+        {
+            Polyhedron temp = new Polyhedron();
+            temp.faces = new Face[1];
+            temp.faces[0] = Face.CreateTriangle(p, p, p);
+            temp.center = p;
+
+            if (radioButtonCenterProj.Checked)
+            {
+                Affine.CentralProjection(temp, 10);
+            }
+            else if (radioButtonIsoProj.Checked)
+            {
+                Affine.IsometricProjection(temp);
+            }
+            else if (radioButtonOrtoProj.Checked)
+            {
+                switch (comboBoxProjPlane.SelectedIndex)
+                {
+                    case 0:
+                        Affine.OrtographicProjection(temp, 'z');
+                        break;
+                    case 1:
+                        Affine.OrtographicProjection(temp, 'y');
+                        break;
+                    case 2:
+                        Affine.OrtographicProjection(temp, 'x');
+                        break;
+                    default:
+                        throw new Exception("Bad projection plane.");
+                }
+            }
+            else
+            {
+                throw new Exception("Projection error.");
+            }
+
+            return temp.faces[0].edges[0].First.To2d();
+        }
+
+        private Color light_color(Color clr, double light)
+        {
+            Color res = Color.FromArgb(clr.A, clr);
+            if (light < 0)
+                res = Color.Black;
+            else if (light <= 1)
+            {
+                int red = (int)(res.R * light);
+                if (red < 0)
+                    red = 0;
+                int green = (int)(res.G * light);
+                if (green < 0)
+                    green = 0;
+                int blue = (int)(res.B * light);
+                if (blue < 0)
+                    blue = 0;
+                res = Color.FromArgb(red, green, blue);
+            }
+            else
+            {
+                int red = (int)(res.R + (255 - res.R) * (light - 1));
+                if (red > 255)
+                    red = 255;
+                int green = (int)(res.G + (255 - res.G) * (light - 1));
+                if (green > 255)
+                    green = 255;
+                int blue = (int)(res.B + (255 - res.B) * (light - 1));
+                if (blue > 255)
+                    blue = 255;
+                res = Color.FromArgb(red, green, blue);
+            }
+            return res;
+        }
+
+        private Dictionary<int, int> interpolate(int i0, int d0, int i1, int d1)
+        {
+            Dictionary<int, int> res = new Dictionary<int, int>();
+            if (i0 == i1)
+            {
+                res.Add(i0, d0);
+                return res;
+            }
+
+            double a = (d1 - d0) / (double)(i1 - i0);
+            double d = d0;
+            for (int i = i0; i <= i1; ++i)
+            {
+                res.Add(i, (int)Math.Round(d));
+                d += a;
+            }
+
+            return res;
+        }
+
+        private void GouraudShading(Polyhedron phd)
+        {
+            double vi = double.Parse(textBox3.Text);
+            double vj = double.Parse(textBox5.Text);
+            double vk = double.Parse(textBox4.Text);
+
+            Polyhedron ph_copy = phd;
+            List<Face> faces = new List<Face>(ph_copy.faces);
+
+            Point3dCompare comp = new Point3dCompare();
+            Dictionary<Point3d, List<Point3d>> normals = new Dictionary<Point3d, List<Point3d>>(comp);
+            for (int i = phd.faces.Count() - 1; i >= 0; --i)
+            {
+                var face = phd.faces[i];
+                Point3d p1 = face.edges[0].First;
+                Point3d p2 = face.edges[1].First;
+                Point3d p3 = face.edges[2].First;
+
+                double[,] matrix = new double[2, 3];
+                matrix[0, 0] = p2.X - p1.X;
+                matrix[0, 1] = p2.Y - p1.Y;
+                matrix[0, 2] = p2.Z - p1.Z;
+                matrix[1, 0] = p3.X - p1.X;
+                matrix[1, 1] = p3.Y - p1.Y;
+                matrix[1, 2] = p3.Z - p1.Z;
+
+                double ni = matrix[0, 1] * matrix[1, 2] - matrix[0, 2] * matrix[1, 1];
+                double nj = matrix[0, 2] * matrix[1, 0] - matrix[0, 0] * matrix[1, 2];
+                double nk = matrix[0, 0] * matrix[1, 1] - matrix[0, 1] * matrix[1, 0];
+                double d = -(ni * p1.X + nj * p1.Y + nk * p1.Z);
+
+                Point3d pp = new Point3d(p1.X + ni, p1.Y + nj, p1.Z + nk);
+                double val1 = ni * pp.X + nj * pp.Y + nk * pp.Z + d;
+                double val2 = ni * phd.center.X + nj * phd.center.Y + nk * phd.center.Z + d;
+                if (val1 * val2 > 0)
+                {
+                    ni = -ni;
+                    nj = -nj;
+                    nk = -nk;
+                }
+
+                Point3d norm = new Point3d(ni, nj, nk);
+                foreach (var edge in face.edges)
+                {
+                    if (!normals.ContainsKey(edge.First))
+                        normals.Add(edge.First, new List<Point3d>());
+                    normals[edge.First].Add(norm);
+                }
+
+                if (ni * vi + nj * vj + nk * vk < 0)
+                    faces.RemoveAt(i);
+            }
+            ph = new Polyhedron();
+            ph.faces = new Face[faces.Count()];
+            for (int j = 0; j < faces.Count(); ++j)
+                ph.faces[j] = faces[j];
+            ph.center = ph_copy.center;
+
+            Dictionary<Point3d, Point3d> norm_verts = new Dictionary<Point3d, Point3d>(comp);
+            foreach (var point in normals.Keys)
+            {
+                double x = normals[point].Sum(p => p.X) / normals[point].Count();
+                double y = normals[point].Sum(p => p.Y) / normals[point].Count();
+                double z = normals[point].Sum(p => p.Z) / normals[point].Count();
+                norm_verts.Add(point, new Point3d(x, y, z));
+            }
+
+            Color color = Color.Black;
+            switch (comboBox2.SelectedIndex)
+            {
+                case 0:
+                    color = Color.Red;
+                    break;
+                case 1:
+                    color = Color.Orange;
+                    break;
+                case 2:
+                    color = Color.Yellow;
+                    break;
+                case 3:
+                    color = Color.Green;
+                    break;
+                case 4:
+                    color = Color.Cyan;
+                    break;
+                case 5:
+                    color = Color.Blue;
+                    break;
+                case 6:
+                    color = Color.DarkViolet;
+                    break;
+            }
+            double light_x = double.Parse(textBox17.Text);
+            double light_y = double.Parse(textBox18.Text);
+            double light_z = double.Parse(textBox19.Text);
+
+            double kd = double.Parse(textBox16.Text);
+            double l0 = double.Parse(textBox15.Text);
+            Dictionary<Point3d, double> lightness = new Dictionary<Point3d, double>(comp);
+            foreach (var point in norm_verts.Keys)
+            {
+                Point3d n = norm_verts[point];
+                double len_n = Math.Sqrt(n.X * n.X + n.Y * n.Y + n.Z * n.Z);
+                Point3d l = new Point3d(light_x - point.X, light_y - point.Y, light_z - point.Z);
+                double len_l = Math.Sqrt(l.X * l.X + l.Y * l.Y + l.Z * l.Z);
+                double cos = (n.X * l.X + n.Y * l.Y + n.Z * l.Z) / len_n / len_l;
+                double ll = kd * cos * l0;
+                lightness.Add(point, ll);
+            }
+
+            Dictionary<Point3d, Point> points_screen = new Dictionary<Point3d, Point>(comp);
+            foreach (var point in lightness.Keys)
+                points_screen.Add(point, find_point_screen(point.Clone() as Point3d));
+
+            Dictionary<Point3d, Color> colors = new Dictionary<Point3d, Color>(comp);
+            foreach (var point in lightness.Keys)
+            {
+                //Point p = points_screen[point];
+                //g.FillEllipse(new SolidBrush(color), p.X - 2, p.Y - 2, 5, 5);
+                colors.Add(point, light_color(color, lightness[point]));
+            }
+
+            foreach (var face in ph.faces)
+            {
+                //try
+                {
+                    Point[] corners = new Point[face.edges.Count() + 1];
+                    Point top = points_screen[face.edges[0].First];
+                    Point bottom = top;
+
+                    for (int i = 0; i < face.edges.Count(); ++i)
+                    {
+                        corners[i] = points_screen[face.edges[i].First];
+                        if (corners[i].Y < top.Y)
+                            top = corners[i];
+                        if (corners[i].Y > bottom.Y)
+                            bottom = corners[i];
+                    }
+                    corners[corners.Count() - 1] = corners[0];
+
+                    //List<Point> border_points = new List<Point>();
+                    Dictionary<int, List<Point>> border_points = new Dictionary<int, List<Point>>();
+                    Dictionary<Point, double> lights = new Dictionary<Point, double>();
+                    for (int i = 0; i < corners.Count() - 1; ++i)
+                    {
+                        Point p0 = corners[i], p1 = corners[i + 1];
+                        double l_0 = lightness[face.edges[i].First];
+                        double l_1 = lightness[face.edges[0].First];
+                        if (i != corners.Count() - 2)
+                            l_1 = lightness[face.edges[i + 1].First];
+
+                        if (Math.Abs(p0.X - p1.X) > Math.Abs(p0.Y - p1.Y))
+                        {
+                            Dictionary<int, int> line = new Dictionary<int, int>();
+                            if (p0.X > p1.X)
+                                line = interpolate(p1.X, p1.Y, p0.X, p0.Y);
+                            else
+                                line = interpolate(p0.X, p0.Y, p1.X, p1.Y);
+                            for (int x = p0.X; ; x += p0.X > p1.X ? -1 : 1)
+                            {
+                                Point p = new Point(x, line[x]);
+                                //border_points.Add(p);
+                                if (!border_points.ContainsKey(p.Y))
+                                    border_points.Add(p.Y, new List<Point>());
+                                border_points[p.Y].Add(p);
+                                double l = l_0 + (l_1 - l_0) / line.Count() * Math.Abs(x - p0.X);
+                                if (!lights.ContainsKey(p))
+                                    lights.Add(p, l);
+                                g.FillRectangle(new SolidBrush(light_color(color, l)), p.X, p.Y, 1, 1);
+                                if (x == p1.X)
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Dictionary<int, int> line = new Dictionary<int, int>();
+                            if (p0.Y > p1.Y)
+                                line = interpolate(p1.Y, p1.X, p0.Y, p0.X);
+                            else
+                                line = interpolate(p0.Y, p0.X, p1.Y, p1.X);
+                            for (int y = p0.Y; ; y += p0.Y > p1.Y ? -1 : 1)
+                            {
+                                Point p = new Point(line[y], y);
+                                //border_points.Add(p);
+                                if (!border_points.ContainsKey(p.Y))
+                                    border_points.Add(p.Y, new List<Point>());
+                                border_points[p.Y].Add(p);
+                                double l = l_0 + (l_1 - l_0) / line.Count() * Math.Abs(y - p0.Y);
+                                if (!lights.ContainsKey(p))
+                                    lights.Add(p, l);
+                                g.FillRectangle(new SolidBrush(light_color(color, l)), p.X, p.Y, 1, 1);
+                                if (y == p1.Y)
+                                    break;
+                            }
+
+                        }
+                    }
+
+                    foreach (var y in border_points.Keys)
+                    {
+                        border_points[y].Sort((p_1, p_2) => p_1.X.CompareTo(p_2.X));
+                        Point p0 = border_points[y].First();
+                        Point p1 = border_points[y].Last();
+                        double l_0 = lights[p0];
+                        double l_1 = lights[p1];
+                        for (int x = p0.X; x < p1.X; ++x)
+                        {
+                            double l = l_0 + (l_1 - l_0) / (p1.X - p0.X) * (x - p0.X);
+                            g.FillRectangle(new SolidBrush(light_color(color, l)), x, y, 1, 1);
+                        }
+                    }
+                }
+                //catch { }
+
+
+                /*
+                Point[] points = new Point[face.edges.Count() * 2];
+                for (int i = 0; i < face.edges.Count(); ++i)
+                {
+                    points[2 * i] = points_screen[face.edges[i].First];
+                    if (i != 0)
+                    {
+                        int xx = (int)Math.Round((points[2 * i - 2].X + points[2 * i].X) / 2.0);
+                        int yy = (int)Math.Round((points[2 * i - 2].Y + points[2 * i].Y) / 2.0);
+                        points[2 * i - 1] = new Point(xx, yy);
+                    }
+                }
+                int x = (int)Math.Round((points[0].X + points[face.edges.Count() * 2 - 2].X) / 2.0);
+                int y = (int)Math.Round((points[0].Y + points[face.edges.Count() * 2 - 2].Y) / 2.0);
+                points[face.edges.Count() * 2 - 1] = new Point(x, y);
+
+                double sum_light = 0;
+                Color[] clrs = new Color[face.edges.Count() * 2];
+                for (int i = 0; i < face.edges.Count(); ++i)
+                {
+                    Color c = colors[face.edges[i].First];
+                    clrs[2 * i] = c;
+                    sum_light += lightness[face.edges[i].First];
+
+                    if (i != 0)
+                    {
+                        double ll = (lightness[face.edges[i - 1].First] + lightness[face.edges[i].First]) / 2.0;
+                        clrs[2 * i - 1] = light_color(color, ll);
+                    }
+                }
+                double l = (lightness[face.edges[0].First] + lightness[face.edges[face.edges.Count() - 1].First]) / 2.0;
+                clrs[face.edges.Count() * 2 - 1] = light_color(color, l);
+
+                sum_light /= face.edges.Count();
+
+                try
+                {
+                    System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
+                    //gp.AddLines(points);
+                    gp.AddPolygon(points);
+                    System.Drawing.Drawing2D.PathGradientBrush pgbrush = new System.Drawing.Drawing2D.PathGradientBrush(points);
+                    pgbrush.SurroundColors = clrs;
+                    pgbrush.CenterColor = light_color(color, sum_light);
+                    g.FillPath(pgbrush, gp);
+                }
+                catch { }
+                */
+
+                /*
+                Point start = points_screen[face.edges[0].First];
+                Color clrstart = colors[face.edges[0].First];
+                for (int pos = 2; pos < face.edges.Count(); ++pos)
+                {
+                    Point p1 = points_screen[face.edges[pos - 1].First];
+                    Point p2 = points_screen[face.edges[pos].First];
+                    int line_len = Math.Abs(p1.X - p2.X) + Math.Abs(p1.Y - p2.Y);
+
+                    Color clr1 = colors[face.edges[pos - 1].First];
+                    Color clr2 = colors[face.edges[pos].First];
+                    double rstep = (double)(clr2.R - clr1.R) / line_len;
+                    double gstep = (double)(clr2.G - clr1.G) / line_len;
+                    double bstep = (double)(clr2.B - clr1.B) / line_len;
+                    double xstep = (double)(p2.X - p1.X) / line_len;
+                    double ystep = (double)(p2.Y - p1.Y) / line_len;
+
+                    for (int i = 0; i <= line_len; ++i)
+                    {
+                        int x = (int)Math.Round(p1.X + xstep * i);
+                        int y = (int)Math.Round(p1.Y + ystep * i);
+                        //if (x == p2.X && y == p2.Y)
+                          //  break;
+                        int red = (int)Math.Round(clr1.R + rstep * i);
+                        int green = (int)Math.Round(clr1.G + gstep * i);
+                        int blue = (int)Math.Round(clr1.B + bstep * i);
+
+                        int xnext = (int)Math.Round(x + xstep);
+                        int ynext = (int)Math.Round(y + ystep);
+                        if (x - xnext == 0 && y - ynext == 0)
+                            if (Math.Abs(xstep) > Math.Abs(ystep))
+                                xnext += xstep > 0 ? 1 : -1;
+                            else
+                                ynext += ystep > 0 ? 1 : -1;
+                        g.DrawLine(new Pen(Color.FromArgb(red, green, blue)), x, y, xnext, ynext);
+
+                        int lline_len = Math.Abs(start.X - x) + Math.Abs(start.Y - y);
+                        double xxstep = (double)(start.X - x) / lline_len;
+                        double yystep = (double)(start.Y - y) / lline_len;
+                        double rrstep = (double)(clrstart.R - red) / lline_len;
+                        double ggstep = (double)(clrstart.G - green) / lline_len;
+                        double bbstep = (double)(clrstart.B - blue) / lline_len;
+                        for (int j = 1; j < lline_len; ++j)
+                        {
+                            int xx = (int)Math.Round(x + xxstep * j);
+                            int yy = (int)Math.Round(y + yystep * j);
+                            //if (xx == start.X && yy == start.Y)
+                              //  break;
+                            int rred = (int)Math.Round(red + rrstep * j);
+                            int ggreen = (int)Math.Round(green + ggstep * j);
+                            int bblue = (int)Math.Round(blue + bbstep * j);
+
+                            int xxnext = (int)Math.Round(xx + xxstep);
+                            int yynext = (int)Math.Round(yy + yystep);
+                            if (xx - xxnext == 0 && yy - yynext == 0)
+                                if (Math.Abs(xxstep) > Math.Abs(yystep))
+                                    xxnext += xxstep > 0 ? 1 : -1;
+                                else
+                                    yynext += yystep > 0 ? 1 : -1;
+                            g.DrawLine(new Pen(Color.FromArgb(rred, ggreen, bblue)), xx, yy, xxnext, yynext);
+                        }
+                    }
+                }*/
+
+            }
+            ph = phd;
+            //System.Threading.Thread.Sleep(40);
         }
     }
 }

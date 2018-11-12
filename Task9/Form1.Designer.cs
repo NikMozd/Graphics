@@ -99,6 +99,17 @@
             this.textBoxGraphY = new System.Windows.Forms.TextBox();
             this.textBoxGraphX = new System.Windows.Forms.TextBox();
             this.comboBoxGraph = new System.Windows.Forms.ComboBox();
+            this.textBox15 = new System.Windows.Forms.TextBox();
+            this.textBox16 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox17 = new System.Windows.Forms.TextBox();
+            this.textBox18 = new System.Windows.Forms.TextBox();
+            this.textBox19 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -109,7 +120,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(17, 15);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(645, 418);
             this.pictureBox1.TabIndex = 0;
@@ -119,7 +130,7 @@
             // 
             this.textBoxTrans.BackColor = System.Drawing.Color.LimeGreen;
             this.textBoxTrans.Location = new System.Drawing.Point(760, 15);
-            this.textBoxTrans.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTrans.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTrans.Name = "textBoxTrans";
             this.textBoxTrans.Size = new System.Drawing.Size(109, 22);
             this.textBoxTrans.TabIndex = 1;
@@ -148,7 +159,7 @@
             // textBoxScale
             // 
             this.textBoxScale.Location = new System.Drawing.Point(760, 79);
-            this.textBoxScale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxScale.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxScale.Name = "textBoxScale";
             this.textBoxScale.Size = new System.Drawing.Size(109, 22);
             this.textBoxScale.TabIndex = 4;
@@ -167,7 +178,7 @@
             // textBoxAngle
             // 
             this.textBoxAngle.Location = new System.Drawing.Point(760, 47);
-            this.textBoxAngle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxAngle.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxAngle.Name = "textBoxAngle";
             this.textBoxAngle.Size = new System.Drawing.Size(109, 22);
             this.textBoxAngle.TabIndex = 6;
@@ -197,7 +208,7 @@
             // textBoxPoint1
             // 
             this.textBoxPoint1.Location = new System.Drawing.Point(760, 144);
-            this.textBoxPoint1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxPoint1.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPoint1.Name = "textBoxPoint1";
             this.textBoxPoint1.Size = new System.Drawing.Size(109, 22);
             this.textBoxPoint1.TabIndex = 14;
@@ -216,7 +227,7 @@
             // textBoxPoint2
             // 
             this.textBoxPoint2.Location = new System.Drawing.Point(760, 176);
-            this.textBoxPoint2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxPoint2.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPoint2.Name = "textBoxPoint2";
             this.textBoxPoint2.Size = new System.Drawing.Size(109, 22);
             this.textBoxPoint2.TabIndex = 12;
@@ -240,9 +251,9 @@
             this.groupBox1.Controls.Add(this.buttonHexa);
             this.groupBox1.Controls.Add(this.buttonTetra);
             this.groupBox1.Location = new System.Drawing.Point(672, 241);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(235, 128);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
@@ -251,7 +262,7 @@
             // Icosahedron
             // 
             this.Icosahedron.Location = new System.Drawing.Point(121, 23);
-            this.Icosahedron.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icosahedron.Margin = new System.Windows.Forms.Padding(4);
             this.Icosahedron.Name = "Icosahedron";
             this.Icosahedron.Size = new System.Drawing.Size(100, 28);
             this.Icosahedron.TabIndex = 34;
@@ -262,7 +273,7 @@
             // Dodecahedron
             // 
             this.Dodecahedron.Location = new System.Drawing.Point(121, 59);
-            this.Dodecahedron.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Dodecahedron.Margin = new System.Windows.Forms.Padding(4);
             this.Dodecahedron.Name = "Dodecahedron";
             this.Dodecahedron.Size = new System.Drawing.Size(100, 28);
             this.Dodecahedron.TabIndex = 35;
@@ -273,7 +284,7 @@
             // buttonOkta
             // 
             this.buttonOkta.Location = new System.Drawing.Point(13, 95);
-            this.buttonOkta.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOkta.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOkta.Name = "buttonOkta";
             this.buttonOkta.Size = new System.Drawing.Size(100, 28);
             this.buttonOkta.TabIndex = 2;
@@ -284,7 +295,7 @@
             // buttonHexa
             // 
             this.buttonHexa.Location = new System.Drawing.Point(13, 59);
-            this.buttonHexa.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonHexa.Margin = new System.Windows.Forms.Padding(4);
             this.buttonHexa.Name = "buttonHexa";
             this.buttonHexa.Size = new System.Drawing.Size(100, 28);
             this.buttonHexa.TabIndex = 1;
@@ -295,7 +306,7 @@
             // buttonTetra
             // 
             this.buttonTetra.Location = new System.Drawing.Point(13, 23);
-            this.buttonTetra.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonTetra.Margin = new System.Windows.Forms.Padding(4);
             this.buttonTetra.Name = "buttonTetra";
             this.buttonTetra.Size = new System.Drawing.Size(100, 28);
             this.buttonTetra.TabIndex = 0;
@@ -307,7 +318,7 @@
             // 
             this.buttonPlot.BackColor = System.Drawing.Color.Lime;
             this.buttonPlot.Location = new System.Drawing.Point(744, 405);
-            this.buttonPlot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPlot.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPlot.Name = "buttonPlot";
             this.buttonPlot.Size = new System.Drawing.Size(100, 28);
             this.buttonPlot.TabIndex = 28;
@@ -322,9 +333,9 @@
             this.groupBox2.Controls.Add(this.radioButtonIsoProj);
             this.groupBox2.Controls.Add(this.radioButtonCenterProj);
             this.groupBox2.Location = new System.Drawing.Point(17, 441);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(256, 122);
             this.groupBox2.TabIndex = 30;
             this.groupBox2.TabStop = false;
@@ -340,7 +351,7 @@
             "Oxz",
             "Oyz"});
             this.comboBoxProjPlane.Location = new System.Drawing.Point(171, 79);
-            this.comboBoxProjPlane.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxProjPlane.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxProjPlane.Name = "comboBoxProjPlane";
             this.comboBoxProjPlane.Size = new System.Drawing.Size(68, 24);
             this.comboBoxProjPlane.TabIndex = 3;
@@ -351,7 +362,7 @@
             // 
             this.radioButtonOrtoProj.AutoSize = true;
             this.radioButtonOrtoProj.Location = new System.Drawing.Point(8, 80);
-            this.radioButtonOrtoProj.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonOrtoProj.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonOrtoProj.Name = "radioButtonOrtoProj";
             this.radioButtonOrtoProj.Size = new System.Drawing.Size(149, 21);
             this.radioButtonOrtoProj.TabIndex = 2;
@@ -364,7 +375,7 @@
             this.radioButtonIsoProj.AutoSize = true;
             this.radioButtonIsoProj.Checked = true;
             this.radioButtonIsoProj.Location = new System.Drawing.Point(8, 52);
-            this.radioButtonIsoProj.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonIsoProj.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonIsoProj.Name = "radioButtonIsoProj";
             this.radioButtonIsoProj.Size = new System.Drawing.Size(140, 21);
             this.radioButtonIsoProj.TabIndex = 1;
@@ -377,7 +388,7 @@
             // 
             this.radioButtonCenterProj.AutoSize = true;
             this.radioButtonCenterProj.Location = new System.Drawing.Point(8, 23);
-            this.radioButtonCenterProj.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonCenterProj.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonCenterProj.Name = "radioButtonCenterProj";
             this.radioButtonCenterProj.Size = new System.Drawing.Size(131, 21);
             this.radioButtonCenterProj.TabIndex = 0;
@@ -393,9 +404,9 @@
             this.groupBox3.Controls.Add(this.radioButtonRot);
             this.groupBox3.Controls.Add(this.radioButtonTrans);
             this.groupBox3.Location = new System.Drawing.Point(281, 441);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox3.Size = new System.Drawing.Size(297, 122);
             this.groupBox3.TabIndex = 31;
             this.groupBox3.TabStop = false;
@@ -405,7 +416,7 @@
             // 
             this.radioButtonAxisRot.AutoSize = true;
             this.radioButtonAxisRot.Location = new System.Drawing.Point(148, 52);
-            this.radioButtonAxisRot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonAxisRot.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonAxisRot.Name = "radioButtonAxisRot";
             this.radioButtonAxisRot.Size = new System.Drawing.Size(133, 21);
             this.radioButtonAxisRot.TabIndex = 5;
@@ -417,7 +428,7 @@
             // 
             this.radioButtonReflect.AutoSize = true;
             this.radioButtonReflect.Location = new System.Drawing.Point(148, 23);
-            this.radioButtonReflect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonReflect.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonReflect.Name = "radioButtonReflect";
             this.radioButtonReflect.Size = new System.Drawing.Size(104, 21);
             this.radioButtonReflect.TabIndex = 3;
@@ -429,7 +440,7 @@
             // 
             this.radioButtonScale.AutoSize = true;
             this.radioButtonScale.Location = new System.Drawing.Point(8, 80);
-            this.radioButtonScale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonScale.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonScale.Name = "radioButtonScale";
             this.radioButtonScale.Size = new System.Drawing.Size(89, 21);
             this.radioButtonScale.TabIndex = 2;
@@ -441,7 +452,7 @@
             // 
             this.radioButtonRot.AutoSize = true;
             this.radioButtonRot.Location = new System.Drawing.Point(8, 52);
-            this.radioButtonRot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonRot.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonRot.Name = "radioButtonRot";
             this.radioButtonRot.Size = new System.Drawing.Size(85, 21);
             this.radioButtonRot.TabIndex = 1;
@@ -454,7 +465,7 @@
             this.radioButtonTrans.AutoSize = true;
             this.radioButtonTrans.Checked = true;
             this.radioButtonTrans.Location = new System.Drawing.Point(8, 23);
-            this.radioButtonTrans.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonTrans.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonTrans.Name = "radioButtonTrans";
             this.radioButtonTrans.Size = new System.Drawing.Size(98, 21);
             this.radioButtonTrans.TabIndex = 0;
@@ -472,7 +483,7 @@
             "Oxz",
             "Oyz"});
             this.comboBoxPlane.Location = new System.Drawing.Point(761, 208);
-            this.comboBoxPlane.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxPlane.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxPlane.Name = "comboBoxPlane";
             this.comboBoxPlane.Size = new System.Drawing.Size(109, 24);
             this.comboBoxPlane.TabIndex = 4;
@@ -487,7 +498,7 @@
             "Oy",
             "Oz"});
             this.comboBoxAxis.Location = new System.Drawing.Point(760, 111);
-            this.comboBoxAxis.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAxis.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAxis.Name = "comboBoxAxis";
             this.comboBoxAxis.Size = new System.Drawing.Size(109, 24);
             this.comboBoxAxis.TabIndex = 32;
@@ -496,7 +507,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Location = new System.Drawing.Point(729, 448);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(124, 114);
             this.pictureBox2.TabIndex = 33;
@@ -750,7 +761,7 @@
             // buttonZbuffer
             // 
             this.buttonZbuffer.Location = new System.Drawing.Point(936, 212);
-            this.buttonZbuffer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonZbuffer.Margin = new System.Windows.Forms.Padding(4);
             this.buttonZbuffer.Name = "buttonZbuffer";
             this.buttonZbuffer.Size = new System.Drawing.Size(79, 41);
             this.buttonZbuffer.TabIndex = 61;
@@ -761,7 +772,7 @@
             // buttonZreset
             // 
             this.buttonZreset.Location = new System.Drawing.Point(1019, 212);
-            this.buttonZreset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonZreset.Margin = new System.Windows.Forms.Padding(4);
             this.buttonZreset.Name = "buttonZreset";
             this.buttonZreset.Size = new System.Drawing.Size(79, 41);
             this.buttonZreset.TabIndex = 62;
@@ -851,11 +862,128 @@
             this.comboBoxGraph.TabIndex = 63;
             this.comboBoxGraph.Text = "z = sin (x + y)";
             // 
+            // textBox15
+            // 
+            this.textBox15.Location = new System.Drawing.Point(1267, 190);
+            this.textBox15.Name = "textBox15";
+            this.textBox15.Size = new System.Drawing.Size(34, 22);
+            this.textBox15.TabIndex = 81;
+            this.textBox15.Text = "5";
+            // 
+            // textBox16
+            // 
+            this.textBox16.Location = new System.Drawing.Point(1166, 190);
+            this.textBox16.Name = "textBox16";
+            this.textBox16.Size = new System.Drawing.Size(34, 22);
+            this.textBox16.TabIndex = 80;
+            this.textBox16.Text = "0,5";
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(1247, 153);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(83, 34);
+            this.label17.TabIndex = 79;
+            this.label17.Text = "Мощность источника";
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(1124, 153);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(116, 34);
+            this.label18.TabIndex = 78;
+            this.label18.Text = "Коэфф. диффуз. отраж.";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(1154, 241);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(157, 21);
+            this.checkBox1.TabIndex = 77;
+            this.checkBox1.Text = "Затенение по Гуро";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // textBox17
+            // 
+            this.textBox17.Location = new System.Drawing.Point(1166, 115);
+            this.textBox17.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox17.Name = "textBox17";
+            this.textBox17.Size = new System.Drawing.Size(31, 22);
+            this.textBox17.TabIndex = 76;
+            this.textBox17.Text = "0";
+            // 
+            // textBox18
+            // 
+            this.textBox18.Location = new System.Drawing.Point(1217, 115);
+            this.textBox18.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox18.Name = "textBox18";
+            this.textBox18.Size = new System.Drawing.Size(31, 22);
+            this.textBox18.TabIndex = 75;
+            this.textBox18.Text = "0";
+            // 
+            // textBox19
+            // 
+            this.textBox19.Location = new System.Drawing.Point(1267, 115);
+            this.textBox19.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox19.Name = "textBox19";
+            this.textBox19.Size = new System.Drawing.Size(31, 22);
+            this.textBox19.TabIndex = 74;
+            this.textBox19.Text = "0";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(1149, 90);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(163, 17);
+            this.label19.TabIndex = 73;
+            this.label19.Text = "Координаты источника";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(1214, 20);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(41, 17);
+            this.label20.TabIndex = 72;
+            this.label20.Text = "Цвет";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Красный",
+            "Оранжевый",
+            "Жёлтый",
+            "Зелёный",
+            "Голубой",
+            "Синий",
+            "Фиолетовый",
+            "Чёрный"});
+            this.comboBox2.Location = new System.Drawing.Point(1151, 43);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(160, 24);
+            this.comboBox2.TabIndex = 71;
+            this.comboBox2.Text = "Красный";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1125, 686);
+            this.ClientSize = new System.Drawing.Size(1345, 686);
+            this.Controls.Add(this.textBox15);
+            this.Controls.Add(this.textBox16);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.textBox17);
+            this.Controls.Add(this.textBox18);
+            this.Controls.Add(this.textBox19);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.textBoxGraphStep);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.buttonGraph);
@@ -913,7 +1041,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxTrans);
             this.Controls.Add(this.pictureBox1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1002,6 +1130,17 @@
         private System.Windows.Forms.TextBox textBoxGraphY;
         private System.Windows.Forms.TextBox textBoxGraphX;
         private System.Windows.Forms.ComboBox comboBoxGraph;
+        private System.Windows.Forms.TextBox textBox15;
+        private System.Windows.Forms.TextBox textBox16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox textBox17;
+        private System.Windows.Forms.TextBox textBox18;
+        private System.Windows.Forms.TextBox textBox19;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }
 
