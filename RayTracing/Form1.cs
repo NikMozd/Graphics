@@ -1559,6 +1559,7 @@ namespace Lab6
         Dictionary<Sphere, Color> sphere_colors = new Dictionary<Sphere, Color>();
         List<Point3d> lights = new List<Point3d>();
         Dictionary<Point3d, double> lights_power = new Dictionary<Point3d, double>();
+        const double eps = 1e-6;
 
         private void add_object(object sender, EventArgs e)
         {
@@ -1656,7 +1657,7 @@ namespace Lab6
             return dist <= s.R;
         }
 
-        private bool find_cross(Point3d cam_pos, Point3d ray_pos, Sphere s, Point3d t)
+        private bool find_cross(Point3d cam_pos, Point3d ray_pos, Sphere s, ref Point3d t)
         {
             Vector d = new Vector(
                 ray_pos.X - cam_pos.X,
@@ -1677,11 +1678,11 @@ namespace Lab6
             double x1 = (-k2 + Math.Sqrt(D)) / (2 * k1);
             double x2 = (-k2 - Math.Sqrt(D)) / (2 * k1);
             double x = 0;
-            if (x1 <= 0 && x2 <= 0)
+            if (x1 < eps && x2 < eps)
                 return false;
-            else if (x1 <= 0)
+            else if (x1 < eps)
                 x = x2;
-            else if (x2 <= 0)
+            else if (x2 < eps)
                 x = x1;
             else
                 x = x1 < x2 ? x1 : x2;
@@ -1705,7 +1706,7 @@ namespace Lab6
             {
                 Point3d t = new Point3d();
                 //if (are_crossed(cam_pos, points[i * pictureBox1.Width + j], s))
-                if (find_cross(start, p, s, t))
+                if (find_cross(start, p, s, ref t))
                 {
                     double d1 = new Vector(start, t).Norm();
                     if (d1 < dist)
@@ -1727,7 +1728,7 @@ namespace Lab6
                 bool flag = false;
                 foreach (var s in spheres)
                 {
-                    if (find_cross(cross, l, s, tt))
+                    if (find_cross(cross, l, s, ref tt))
                     {
                         flag = true;
                         break;
@@ -1735,7 +1736,14 @@ namespace Lab6
                 }
                 if (flag)
                     continue;
-                ll += lights_power[l];
+                //ll += lights_power[l];
+
+                double kd = 0.5; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                double l0 = lights_power[l];
+                Vector N = new Vector(sph.C, cross);
+                Vector L = new Vector(cross, l);
+                double cos = (N.X * L.X + N.Y * L.Y + N.Z * L.Z) / N.Norm() / L.Norm();
+                ll += kd * cos * l0;
             }
 
             return light_color(sphere_colors[sph], ll);
@@ -1743,6 +1751,7 @@ namespace Lab6
 
         private void Init()
         {
+            
             spheres.Clear();
             spheres.Add(new Sphere(new Point3d(0, 0, 0), 1));
             spheres.Add(new Sphere(new Point3d(2, 4, 6), 2));
@@ -1760,8 +1769,30 @@ namespace Lab6
             lights.Add(new Point3d(-2, -2, -3));
 
             lights_power.Clear();
-            lights_power.Add(lights[0], 0.8);
-            lights_power.Add(lights[1], 0.6);
+            lights_power.Add(lights[0], 2);
+            lights_power.Add(lights[1], 3);
+            
+            /*
+            spheres.Clear();
+            spheres.Add(new Sphere(new Point3d(0, 0, 0), 1));
+            spheres.Add(new Sphere(new Point3d(2, 0, 0), 1));
+            spheres.Add(new Sphere(new Point3d(0, 2, 0), 1));
+            spheres.Add(new Sphere(new Point3d(0, 0, 2), 1));
+
+            sphere_colors.Clear();
+            sphere_colors.Add(spheres[0], Color.White);
+            sphere_colors.Add(spheres[1], Color.Red);
+            sphere_colors.Add(spheres[2], Color.Green);
+            sphere_colors.Add(spheres[3], Color.Blue);
+
+            lights.Clear();
+            lights.Add(new Point3d(8, 0, 8));
+            //lights.Add(new Point3d(0, 8, 8));
+
+            lights_power.Clear();
+            lights_power.Add(lights[0], 2);
+            //lights_power.Add(lights[1], 2);
+            */
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -1789,6 +1820,8 @@ namespace Lab6
             for (int i = 0; i < pictureBox1.Height; i += 1)
                 for (int j = 0; j < pictureBox1.Width; j += 1)
                 {
+                    if (i == pictureBox1.Height / 2)
+                        ;
                     var clr = ray_step(cam_pos, points[i * pictureBox1.Width + j], 1);
                     g.FillRectangle(new SolidBrush(clr), j, i, 1, 1);
                     
