@@ -808,7 +808,15 @@ namespace Lab6
         private static Color[] palette = new Color[8] { Color.Gray, Color.Black, Color.Red, Color.Yellow, Color.Green, Color.DarkBlue, Color.Cyan, Color.Magenta };
     }
 
-    class Sphere
+    class Object
+    {
+        virtual public bool find_cross(Point3d cam_pos, Point3d ray_pos, ref Point3d t) { return true; }
+        virtual public Vector normal(Point3d p) { return new Vector(); }
+
+        protected const double eps = 1e-6;
+    }
+
+    class Sphere : Object
     {
         Point3d center;
         double radius;
@@ -853,6 +861,130 @@ namespace Lab6
             
             this.center = ph.Center;
             this.radius = dist;
+        }
+
+        public override bool find_cross(Point3d cam_pos, Point3d ray_pos, ref Point3d t)
+        {
+            Vector d = new Vector(
+                ray_pos.X - cam_pos.X,
+                ray_pos.Y - cam_pos.Y,
+                ray_pos.Z - cam_pos.Z);
+            Vector c = new Vector(
+                cam_pos.X - this.C.X,
+                cam_pos.Y - this.C.Y,
+                cam_pos.Z - this.C.Z);
+
+            double k1 = d * d,
+                   k2 = 2 * (c * d),
+                   k3 = (c * c) - this.R * this.R;
+            double D = k2 * k2 - 4 * k1 * k3;
+            if (D < 0)
+                return false;
+
+            double x1 = (-k2 + Math.Sqrt(D)) / (2 * k1);
+            double x2 = (-k2 - Math.Sqrt(D)) / (2 * k1);
+            double x = 0;
+            if (x1 < eps && x2 < eps)
+                return false;
+            else if (x1 < eps)
+                x = x2;
+            else if (x2 < eps)
+                x = x1;
+            else
+                x = x1 < x2 ? x1 : x2;
+
+            t = new Point3d(
+                cam_pos.X + d.X * x,
+                cam_pos.Y + d.Y * x,
+                cam_pos.Z + d.Z * x);
+            return true;
+        }
+
+        public override Vector normal(Point3d p)
+        {
+            return new Vector(this.C, p);
+        }
+    }
+
+    class Wall : Object
+    {
+        Point3d[] points;
+        double square;
+
+        public Wall(Point3d p1, Point3d p2, Point3d p3, Point3d p4)
+        {
+            Vector v1 = new Vector(p1, p2);
+            Vector v2 = new Vector(p1, p3);
+            Vector n = v1[v2];
+            double d = -(n.X * p1.X + n.Y * p1.Y + n.Z * p1.Z);
+            if (Math.Abs(n.X * p4.X + n.Y * p4.Y + n.Z * p4.Z + d) > eps)
+                throw new Exception("bad wall");
+            points = new Point3d[4];
+            points[0] = p1;
+            points[1] = p2;
+            points[2] = p3;
+            points[3] = p4;
+            square = triangle_square(p1, p2, p3) + triangle_square(p1, p3, p4);
+        }
+
+        private double triangle_square(Point3d A, Point3d B, Point3d C)
+        {
+            double a = new Vector(B, C).Norm();
+            double b = new Vector(A, C).Norm();
+            double c = new Vector(A, B).Norm();
+            double p = (a + b + c) / 2;
+            return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+        }
+
+        public override bool find_cross(Point3d cam_pos, Point3d ray_pos, ref Point3d t)
+        {
+            Vector n = this.normal(null);
+            double d = -(n.X * points[0].X + n.Y * points[0].Y + n.Z * points[0].Z);
+
+            Vector v = new Vector(cam_pos, ray_pos);
+            Vector u = new Vector(cam_pos);
+
+            double denum = n * v;
+            if (Math.Abs(denum) < eps)
+                return false;
+            double num = n * u + d;
+            double tp = -num / denum;
+            if (tp < eps)
+                return false;
+            t = new Point3d(
+                v.X * tp + u.X,
+                v.Y * tp + u.Y,
+                v.Z * tp + u.Z);
+
+            /*Vector vt = new Vector(this.center, t);
+            Point3d ut = this.center;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                Vector v_ = new Vector(points[i], points[(i + 1) % 4]);
+                Point3d u_ = points[i];
+                if (Math.Abs(Math.Abs(vt * v_ / vt.Norm() / v_.Norm()) - 1) > eps)
+                {
+                    double t_ = (-vt.Y * (u_.X - ut.X) + vt.X * (u_.Y - ut.Y)) / (-v_.X * vt.Y + vt.X * v_.Y);
+                    double s_ = (-v_.Y * (u_.X - ut.X) + v_.X * (u_.Y - ut.Y)) / (-v_.X * vt.Y + vt.X * v_.Y);
+                    if (0 <= t_ && t_ <= 1 && 0 <= s_ && s_ <= 1)
+                        return false;
+                }
+            }*/
+            double square = 0;
+            for (int i = 0; i < 4; ++i)
+                square += triangle_square(points[i], points[(i + 1) % 4], t);
+            if (Math.Abs(this.square - square) > eps)
+                return false;
+
+            return true;
+        }
+
+        public override Vector normal(Point3d p)
+        {
+            Vector v1 = new Vector(points[0], points[1]);
+            Vector v2 = new Vector(points[0], points[2]);
+            return v1[v2];
         }
     }
 }

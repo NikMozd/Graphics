@@ -1106,7 +1106,7 @@ namespace Lab6
                 res = Color.Black;
             else if (light <= 1)
             {
-                int red = (int)(res.R * light);
+                /*int red = (int)(res.R * light);
                 if (red < 0)
                     red = 0;
                 int green = (int)(res.G * light);
@@ -1115,6 +1115,10 @@ namespace Lab6
                 int blue = (int)(res.B * light);
                 if (blue < 0)
                     blue = 0;
+                res = Color.FromArgb(red, green, blue);*/
+                int red = (int)(ambient.R + (res.R - ambient.R) * light);
+                int green = (int)(ambient.G + (res.G - ambient.G) * light);
+                int blue = (int)(ambient.B + (res.B - ambient.B) * light);
                 res = Color.FromArgb(red, green, blue);
             }
             else
@@ -1517,8 +1521,8 @@ namespace Lab6
 
             Vector view = cam.View * dist;
             Point3d m0 = new Point3d(
-                cam.Pos.X + view.X, 
-                cam.Pos.Y + view.Y, 
+                cam.Pos.X + view.X,
+                cam.Pos.Y + view.Y,
                 cam.Pos.Z + view.Z);
 
             /*double a = cam.View.X;
@@ -1554,24 +1558,19 @@ namespace Lab6
             return res;
         }
 
-        List<Polyhedron> objects = new List<Polyhedron>();
+        List<Object> objects = new List<Object>();
         List<Sphere> spheres = new List<Sphere>();
-        Dictionary<Sphere, Color> sphere_colors = new Dictionary<Sphere, Color>();
+        Dictionary<Object, Color> colors = new Dictionary<Object, Color>();
+        Dictionary<Object, double> diffuse = new Dictionary<Object, double>();
+        Dictionary<Object, double> reflect = new Dictionary<Object, double>();
+        Dictionary<Object, double> trans = new Dictionary<Object, double>();
+        Dictionary<Object, double> refract = new Dictionary<Object, double>();
+
         List<Point3d> lights = new List<Point3d>();
         Dictionary<Point3d, double> lights_power = new Dictionary<Point3d, double>();
+
+        Color ambient = Color.Black;
         const double eps = 1e-6;
-
-        private void add_object(object sender, EventArgs e)
-        {
-
-            /*label5.Text = "C:\\Users\\mozdo\\Desktop\\Task9 Ксюша\\файлы\\дыня.txt";
-            this.button4_Click(sender, e);
-            objects.Add(ph.Clone() as Polyhedron);
-            g.Clear(Color.White);*/
-
-            objects.Add(ph);
-            
-        }
 
         private List<Sphere> find_spheres(List<Polyhedron> objects)
         {
@@ -1696,39 +1695,42 @@ namespace Lab6
 
         private Color ray_step(Point3d start, Point3d p, double intense)
         {
-            if (intense < 0.1)
+            if (intense < 0.01)
                 return Color.Black;
 
             double dist = double.MaxValue;
-            Sphere sph = null;
+            Object obj = null;
             Point3d cross = new Point3d();
-            foreach (var s in spheres)
+            foreach (var o in objects)
             {
                 Point3d t = new Point3d();
                 //if (are_crossed(cam_pos, points[i * pictureBox1.Width + j], s))
-                if (find_cross(start, p, s, ref t))
+                //if (find_cross(start, p, o, ref t))
+                if (o.find_cross(start, p, ref t))
                 {
                     double d1 = new Vector(start, t).Norm();
                     if (d1 < dist)
                     {
                         dist = d1;
-                        sph = s;
+                        obj = o;
                         cross = t;
                     }
                 }
             }
 
-            if (sph == null)
-                return Color.Black;
+            if (obj == null)
+                return ambient;
 
-            double ll = 0;
+            // диффузное освещение
+            double ldiff = 0;
             Point3d tt = new Point3d();
             foreach (var l in lights)
             {
                 bool flag = false;
-                foreach (var s in spheres)
+                foreach (var o in objects)
                 {
-                    if (find_cross(cross, l, s, ref tt))
+                    //if (find_cross(cross, l, s, ref tt))
+                    if (o.find_cross(cross, l, ref tt))
                     {
                         flag = true;
                         break;
@@ -1738,61 +1740,242 @@ namespace Lab6
                     continue;
                 //ll += lights_power[l];
 
-                double kd = 0.5; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                double kd = diffuse[obj];
                 double l0 = lights_power[l];
-                Vector N = new Vector(sph.C, cross);
+                Vector N = obj.normal(cross);
                 Vector L = new Vector(cross, l);
-                double cos = (N.X * L.X + N.Y * L.Y + N.Z * L.Z) / N.Norm() / L.Norm();
-                ll += kd * cos * l0;
+                if (N * L < 0)
+                    N = -N;
+                double cos = (N * L) / N.Norm() / L.Norm();
+                ldiff += kd * cos * l0;
             }
 
-            return light_color(sphere_colors[sph], ll);
+            Color res = light_color(colors[obj], ldiff * intense);
+
+            // отражение
+            if (reflect[obj] > 0)
+            {
+                Vector l = new Vector(start, p);
+                l = l.Normalize();
+                Vector n = obj.normal(cross);
+                n = n.Normalize();
+                if (n * l > 0)
+                    n = -n;
+                Vector r = l - 2 * n * (n * l);
+                Point3d p_new = new Point3d(
+                    cross.X + r.X,
+                    cross.Y + r.Y,
+                    cross.Z + r.Z);
+                Color clr_refl = ray_step(cross, p_new, intense * reflect[obj]);
+                res = Color.FromArgb(
+                    (res.R + clr_refl.R) / 2,
+                    (res.G + clr_refl.G) / 2,
+                    (res.B + clr_refl.B) / 2);
+                // ????????????????????????????????????????????????
+            }
+
+            //преломление
+            if (trans[obj] > 0)
+            {
+                Vector l = new Vector(start, p);
+                l = l.Normalize();
+                Vector n = obj.normal(cross);
+                n = n.Normalize();
+                if (n * l > 0)
+                    n = -n;
+                double coef = 1 / refract[obj];
+                double cos = Math.Sqrt(1 - coef * coef * (1 - (n * l) * (n * l)));
+                Vector t = coef * l - (cos + coef * (n * l)) * n;
+                Point3d p_new = new Point3d(
+                    cross.X + t.X,
+                    cross.Y + t.Y,
+                    cross.Z + t.Z);
+                //if (!find_cross(cross, p_new, sph, ref tt))
+                if (!obj.find_cross(cross, p_new, ref tt))
+                    return res;
+
+                l = new Vector(cross, p_new);
+                l = l.Normalize();
+                n = obj.normal(tt);
+                n.Normalize();
+                if (n * l > 0)
+                    n = -n;
+                coef = refract[obj];
+                cos = Math.Sqrt(1 - coef * coef * (1 - (n * l) * (n * l)));
+                t = coef * l - (cos + coef * (n * l)) * n;
+                p_new = new Point3d(
+                    tt.X + t.X,
+                    tt.Y + t.Y,
+                    tt.Z + t.Z);
+
+                Color clr_trans = ray_step(tt, p_new, intense * trans[obj]);
+                res = Color.FromArgb(
+                    (res.R + clr_trans.R) / 2,
+                    (res.G + clr_trans.G) / 2,
+                    (res.B + clr_trans.B) / 2);
+                // ???????????????????????????????????????????????????
+            }
+
+            return res;
         }
 
         private void Init()
         {
+            objects.Clear();
+            colors.Clear();
+            diffuse.Clear();
+            reflect.Clear();
+            trans.Clear();
+            refract.Clear();
+
             
-            spheres.Clear();
-            spheres.Add(new Sphere(new Point3d(0, 0, 0), 1));
-            spheres.Add(new Sphere(new Point3d(2, 4, 6), 2));
-            spheres.Add(new Sphere(new Point3d(3, 0, 0), 1));
-            spheres.Add(new Sphere(new Point3d(0, 3, 1), 2));
+            /*objects.Add(new Sphere(new Point3d(0, 0, 0), 1));
+            colors.Add(objects[0], Color.White);
+            diffuse.Add(objects[0], 0.5);
+            reflect.Add(objects[0], 0.5);
+            trans.Add(objects[0], 0.2);
+            refract.Add(objects[0], 2.42);
 
-            sphere_colors.Clear();
-            sphere_colors.Add(spheres[0], Color.White);
-            sphere_colors.Add(spheres[1], Color.Cyan);
-            sphere_colors.Add(spheres[2], Color.Fuchsia);
-            sphere_colors.Add(spheres[3], Color.SeaGreen);
+            objects.Add(new Sphere(new Point3d(2, 4, 6), 2));
+            colors.Add(objects[1], Color.Cyan);
+            diffuse.Add(objects[1], 0.5);
+            reflect.Add(objects[1], 0.5);
+            trans.Add(objects[1], 0.3);
+            refract.Add(objects[1], 2.42);
 
-            lights.Clear();
-            lights.Add(new Point3d(7, 7, 7));
-            lights.Add(new Point3d(-2, -2, -3));
+            objects.Add(new Sphere(new Point3d(3, 0, 0), 1));
+            colors.Add(objects[2], Color.Fuchsia);
+            diffuse.Add(objects[2], 0.5);
+            reflect.Add(objects[2], 0.3);
+            trans.Add(objects[2], 0.1);
+            refract.Add(objects[2], 2.42);
 
-            lights_power.Clear();
-            lights_power.Add(lights[0], 2);
-            lights_power.Add(lights[1], 3);
-            
-            /*
-            spheres.Clear();
-            spheres.Add(new Sphere(new Point3d(0, 0, 0), 1));
-            spheres.Add(new Sphere(new Point3d(2, 0, 0), 1));
-            spheres.Add(new Sphere(new Point3d(0, 2, 0), 1));
-            spheres.Add(new Sphere(new Point3d(0, 0, 2), 1));
-
-            sphere_colors.Clear();
-            sphere_colors.Add(spheres[0], Color.White);
-            sphere_colors.Add(spheres[1], Color.Red);
-            sphere_colors.Add(spheres[2], Color.Green);
-            sphere_colors.Add(spheres[3], Color.Blue);
-
-            lights.Clear();
-            lights.Add(new Point3d(8, 0, 8));
-            //lights.Add(new Point3d(0, 8, 8));
-
-            lights_power.Clear();
-            lights_power.Add(lights[0], 2);
-            //lights_power.Add(lights[1], 2);
+            objects.Add(new Sphere(new Point3d(0, 3, 1), 2));
+            colors.Add(objects[3], Color.Salmon);
+            diffuse.Add(objects[3], 0.5);
+            reflect.Add(objects[3], 0.7);
+            trans.Add(objects[3], 0.4);
+            refract.Add(objects[3], 2.42);
             */
+            /*
+            objects.Add(new Sphere(new Point3d(0, 0, 0), 1));
+            colors.Add(objects[0], Color.White);
+            diffuse.Add(objects[0], 0.5);
+            reflect.Add(objects[0], 0.5);
+            trans.Add(objects[0], 0);
+            refract.Add(objects[0], 2.42);
+
+            objects.Add(new Sphere(new Point3d(2, 0, 0), 1));
+            colors.Add(objects[1], Color.Red);
+            diffuse.Add(objects[1], 0.5);
+            reflect.Add(objects[1], 0.5);
+            trans.Add(objects[1], 0);
+            refract.Add(objects[1], 2.42);
+
+            objects.Add(new Sphere(new Point3d(0, 2, 0), 1));
+            colors.Add(objects[2], Color.Green);
+            diffuse.Add(objects[2], 0.5);
+            reflect.Add(objects[2], 0.3);
+            trans.Add(objects[2], 0);
+            refract.Add(objects[2], 2.42);
+
+            objects.Add(new Sphere(new Point3d(0, 0, 2), 1));
+            colors.Add(objects[3], Color.Blue);
+            diffuse.Add(objects[3], 0.5);
+            reflect.Add(objects[3], 0.7);
+            trans.Add(objects[3], 0);
+            refract.Add(objects[3], 2.42);
+            */
+            //objects.Add(new Sphere(new Point3d(3, 3, 3), 1));
+            //colors.Add(objects[4], Color.White);
+            //diffuse.Add(objects[4], 0.5);
+            //reflect.Add(objects[4], 0);
+            //trans.Add(objects[4], 0.9);
+            //refract.Add(objects[4], 1);
+
+            objects.Add(new Wall(
+                new Point3d(-10, -10, -10), 
+                new Point3d(-10, -10, 10), 
+                new Point3d(-10, 10, 10), 
+                new Point3d(-10, 10, -10)));
+            colors.Add(objects.Last(), Color.White);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);
+
+            objects.Add(new Wall(
+                new Point3d(-10, 10, -10),
+                new Point3d(-10, 10, 10),
+                new Point3d(10, 10, 10),
+                new Point3d(10, 10, -10)));
+            colors.Add(objects.Last(), Color.Red);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);
+
+            objects.Add(new Wall(
+                new Point3d(10, 10, -10),
+                new Point3d(10, 10, 10),
+                new Point3d(10, -10, 10),
+                new Point3d(10, -10, -10)));
+            colors.Add(objects.Last(), Color.Green);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);
+
+            objects.Add(new Wall(
+                new Point3d(10, -10, -10),
+                new Point3d(10, -10, 10),
+                new Point3d(-10, -10, 10),
+                new Point3d(-10, -10, -10)));
+            colors.Add(objects.Last(), Color.Blue);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);
+
+            /*objects.Add(new Wall(
+               new Point3d(-10, -10, 10),
+               new Point3d(10, -10, 10),
+               new Point3d(10, 10, 10),
+               new Point3d(-10, 10, 10)));
+            colors.Add(objects.Last(), Color.Purple);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);*/
+
+            objects.Add(new Wall(
+               new Point3d(-10, -10, -10),
+               new Point3d(10, -10, -10),
+               new Point3d(10, 10, -10),
+               new Point3d(-10, 10, -10)));
+            colors.Add(objects.Last(), Color.Purple);
+            diffuse.Add(objects.Last(), 0.5);
+            reflect.Add(objects.Last(), 0);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1);
+
+            lights.Clear();
+            lights_power.Clear();
+
+            /*
+            lights.Add(new Point3d(7, 7, 7));
+            lights_power.Add(lights[0], 2);
+
+            lights.Add(new Point3d(-2, -2, -3));
+            lights_power.Add(lights[1], 3);
+            */
+            
+            lights.Add(new Point3d(8, 0, 8));
+            lights_power.Add(lights.Last(), 1);
+
+            lights.Add(new Point3d(0, 8, 8));
+            lights_power.Add(lights.Last(), 1);
+            
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -1815,8 +1998,8 @@ namespace Lab6
                     g.FillRectangle(new SolidBrush(Color.Red), p.X, p.Y, 1, 1);
                 }
             */
-            
-            g.Clear(Color.Black);
+
+            g.Clear(ambient);
             for (int i = 0; i < pictureBox1.Height; i += 1)
                 for (int j = 0; j < pictureBox1.Width; j += 1)
                 {
