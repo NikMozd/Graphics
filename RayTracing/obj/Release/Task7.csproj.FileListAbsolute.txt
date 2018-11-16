@@ -1,0 +1,9 @@
+C:\Users\mozdo\Desktop\Task7\bin\Release\Lab6.exe.config
+C:\Users\mozdo\Desktop\Task7\bin\Release\Lab6.exe
+C:\Users\mozdo\Desktop\Task7\bin\Release\Lab6.pdb
+C:\Users\mozdo\Desktop\Task7\obj\Release\Lab6.Form1.resources
+C:\Users\mozdo\Desktop\Task7\obj\Release\Lab6.Properties.Resources.resources
+C:\Users\mozdo\Desktop\Task7\obj\Release\Task7.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\Task7\obj\Release\Task7.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\Task7\obj\Release\Lab6.exe
+C:\Users\mozdo\Desktop\Task7\obj\Release\Lab6.pdb

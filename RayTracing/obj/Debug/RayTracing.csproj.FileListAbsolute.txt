@@ -1,0 +1,10 @@
+C:\Users\mozdo\Desktop\RayTracing\bin\Debug\Lab6.exe.config
+C:\Users\mozdo\Desktop\RayTracing\bin\Debug\Lab6.exe
+C:\Users\mozdo\Desktop\RayTracing\bin\Debug\Lab6.pdb
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\RayTracing.csprojAssemblyReference.cache
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\Lab6.Form1.resources
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\Lab6.Properties.Resources.resources
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\RayTracing.csproj.GenerateResource.cache
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\RayTracing.csproj.CoreCompileInputs.cache
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\Lab6.exe
+C:\Users\mozdo\Desktop\RayTracing\obj\Debug\Lab6.pdb
