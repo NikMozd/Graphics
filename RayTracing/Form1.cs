@@ -1571,6 +1571,7 @@ namespace Lab6
 
         Color ambient = Color.Black;
         const double eps = 1e-6;
+        const double amb_light = 0.3;
 
         private List<Sphere> find_spheres(List<Polyhedron> objects)
         {
@@ -1774,7 +1775,7 @@ namespace Lab6
                 ldiff += kd * cos * l0;
             }
 
-            Color clr_diff = light_color(colors[obj], ldiff * intense);
+            Color clr_diff = light_color(colors[obj], (ldiff + amb_light)* intense);
 
             // отражение
             Color clr_refl = Color.Black;
@@ -1812,22 +1813,47 @@ namespace Lab6
                     cross.Y + t.Y,
                     cross.Z + t.Z);
                 //if (!find_cross(cross, p_new, sph, ref tt))
-                if (!obj.find_cross(cross, p_new, ref tt))
-                    return clr_diff;
 
-                l = new Vector(cross, p_new);
-                l = l.Normalize();
-                n = obj.normal(tt);
-                n.Normalize();
-                if (n * l > 0)
-                    n = -n;
-                coef = refract[obj];
-                cos = Math.Sqrt(1 - coef * coef * (1 - (n * l) * (n * l)));
-                t = coef * l - (cos + coef * (n * l)) * n;
-                p_new = new Point3d(
-                    tt.X + t.X,
-                    tt.Y + t.Y,
-                    tt.Z + t.Z);
+                for (int i = 0; i < 10; ++i)
+                {
+                    if (!obj.find_cross(cross, p_new, ref tt))
+                        return clr_diff;
+
+                    l = new Vector(cross, p_new);
+                    l = l.Normalize();
+                    n = obj.normal(tt);
+                    n.Normalize();
+                    if (n * l > 0)
+                        n = -n;
+                    coef = refract[obj];
+                    cos = 1 - coef * coef * (1 - (n * l) * (n * l));
+                    if (cos < 0)
+                    {
+                        if (i == 9)
+                        {
+                            cross = tt;
+                            p_new = new Point3d(
+                                cross.X + l.X,
+                                cross.Y + l.Y,
+                                cross.Z + l.Z);
+                            break;
+                        }
+                        Vector r = l - 2 * n * (n * l);
+                        cross = tt;
+                        p_new = new Point3d(
+                            cross.X + r.X,
+                            cross.Y + r.Y,
+                            cross.Z + r.Z);
+                        continue;
+                    }
+                    cos = Math.Sqrt(cos);
+                    t = coef * l - (cos + coef * (n * l)) * n;
+                    p_new = new Point3d(
+                        tt.X + t.X,
+                        tt.Y + t.Y,
+                        tt.Z + t.Z);
+                    break;
+                }
 
                 clr_trans = ray_step(tt, p_new, intense * trans[obj]);
             }
@@ -1867,13 +1893,13 @@ namespace Lab6
             refract.Add(objects.Last(), 2.42);
 
             objects.Add(new Sphere(new Point3d(0, 3, 1), 2));
-            colors.Add(objects.Last(), Color.Salmon);
+            colors.Add(objects.Last(), Color.ForestGreen);
             diffuse.Add(objects.Last(), 0.5);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
             refract.Add(objects.Last(), 2.42);
             */
-            
+            /*
             objects.Add(new Sphere(new Point3d(0, 0, 0), 1));
             colors.Add(objects.Last(), Color.White);
             diffuse.Add(objects.Last(), 0.5);
@@ -1901,20 +1927,20 @@ namespace Lab6
             reflect.Add(objects.Last(), 0.1);
             trans.Add(objects.Last(), 0);
             refract.Add(objects.Last(), 2.42);
-            
+            /*
             objects.Add(new Sphere(new Point3d(3, 3, 3), 1));
             colors.Add(objects.Last(), Color.White);
             diffuse.Add(objects.Last(), 0.1);
             reflect.Add(objects.Last(), 0);
             trans.Add(objects.Last(), 0.9);
             refract.Add(objects.Last(), 2.42);
-
+            */
             objects.Add(new Wall(
                 new Point3d(-10, -10, -10), 
                 new Point3d(-10, -10, 10), 
                 new Point3d(-10, 10, 10), 
                 new Point3d(-10, 10, -10)));
-            colors.Add(objects.Last(), Color.White);
+            colors.Add(objects.Last(), Color.Blue);
             diffuse.Add(objects.Last(), 0.8);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
@@ -1925,7 +1951,7 @@ namespace Lab6
                 new Point3d(-10, 10, 10),
                 new Point3d(10, 10, 10),
                 new Point3d(10, 10, -10)));
-            colors.Add(objects.Last(), Color.Red);
+            colors.Add(objects.Last(), Color.Blue);
             diffuse.Add(objects.Last(), 0.8);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
@@ -1936,7 +1962,7 @@ namespace Lab6
                 new Point3d(10, 10, 10),
                 new Point3d(10, -10, 10),
                 new Point3d(10, -10, -10)));
-            colors.Add(objects.Last(), Color.Green);
+            colors.Add(objects.Last(), Color.Blue);
             diffuse.Add(objects.Last(), 0.8);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
@@ -1958,7 +1984,7 @@ namespace Lab6
                new Point3d(10, -10, 10),
                new Point3d(10, 10, 10),
                new Point3d(-10, 10, 10)));
-            colors.Add(objects.Last(), Color.Purple);
+            colors.Add(objects.Last(), Color.Blue);
             diffuse.Add(objects.Last(), 0.8);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
@@ -1969,11 +1995,18 @@ namespace Lab6
                new Point3d(10, -10, -10),
                new Point3d(10, 10, -10),
                new Point3d(-10, 10, -10)));
-            colors.Add(objects.Last(), Color.Purple);
+            colors.Add(objects.Last(), Color.White);
             diffuse.Add(objects.Last(), 0.8);
             reflect.Add(objects.Last(), 0.2);
             trans.Add(objects.Last(), 0);
             refract.Add(objects.Last(), 1);
+            
+            objects.Add(new Poly(ph));
+            colors.Add(objects.Last(), Color.Cyan);
+            diffuse.Add(objects.Last(), 0.3);
+            reflect.Add(objects.Last(), 0.7);
+            trans.Add(objects.Last(), 0);
+            refract.Add(objects.Last(), 1.2);
 
             /*
             objects.Add(new Sphere(new Point3d(5, 1, 8), 1));
@@ -2002,11 +2035,11 @@ namespace Lab6
             lights_power.Add(lights.Last(), 1);
             */
 
-            lights.Add(new Point3d(5, 0, 5));
-            lights_power.Add(lights.Last(), 1);
+            //lights.Add(new Point3d(5, 0, 5));
+            //lights_power.Add(lights.Last(), 1);
 
-            lights.Add(new Point3d(0, 0, 9));
-            lights_power.Add(lights.Last(), 1);
+            lights.Add(new Point3d(9, 9, 9));
+            lights_power.Add(lights.Last(), 2);
 
         }
 

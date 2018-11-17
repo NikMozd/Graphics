@@ -987,4 +987,109 @@ namespace Lab6
             return v1[v2];
         }
     }
+
+    class Poly : Object
+    {
+        Polyhedron ph;
+        Sphere sph;
+        Dictionary<Face, double> squares = new Dictionary<Face, double>();
+
+        public Poly(Polyhedron p)
+        {
+            ph = p.Clone() as Polyhedron;
+            sph = new Sphere(ph);
+            squares.Clear();
+            foreach (var face in ph.Faces)
+            {
+                double s = 0;
+                int cnt = face.Edges.Count();
+                for (int i = 1; i < cnt - 1; ++i)
+                    s += triangle_square(face.Edges[0].First, face.Edges[i].First, face.Edges[i + 1].First);
+                squares.Add(face, s);
+            }
+        }
+
+        private double triangle_square(Point3d A, Point3d B, Point3d C)
+        {
+            double a = new Vector(B, C).Norm();
+            double b = new Vector(A, C).Norm();
+            double c = new Vector(A, B).Norm();
+            double p = (a + b + c) / 2;
+            return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+        }
+
+        public override bool find_cross(Point3d cam_pos, Point3d ray_pos, ref Point3d t)
+        {
+            if (!sph.find_cross(cam_pos, ray_pos, ref t))
+                return false;
+
+            double dist = double.MaxValue;
+            Point3d res = new Point3d();
+            bool flag = false;
+
+            foreach (var face in ph.Faces)
+            {
+                var p1 = face.Edges[0].First;
+                var p2 = face.Edges[1].First;
+                var p3 = face.Edges[2].First;
+                Vector v1 = new Vector(p1, p2);
+                Vector v2 = new Vector(p1, p3);
+                Vector n = v1[v2];
+                double d = -(n.X * p1.X + n.Y * p1.Y + n.Z * p1.Z);
+
+                Vector v = new Vector(cam_pos, ray_pos);
+                Vector u = new Vector(cam_pos);
+
+                double denum = n * v;
+                if (Math.Abs(denum) < eps)
+                    continue;
+                double num = n * u + d;
+                double tp = -num / denum;
+                if (tp < eps)
+                    continue;
+                t = new Point3d(
+                    v.X * tp + u.X,
+                    v.Y * tp + u.Y,
+                    v.Z * tp + u.Z);
+
+                double square = 0;
+                int cnt = face.Edges.Count();
+                for (int i = 0; i < cnt; ++i)
+                    square += triangle_square(face.Edges[i].First, face.Edges[(i + 1) % cnt].First, t);
+                if (Math.Abs(squares[face] - square) > eps)
+                    continue;
+                var dist_t = new Vector(cam_pos, t).Norm();
+                if (dist_t < dist)
+                {
+                    res = t.Clone() as Point3d;
+                    dist = dist_t;
+                    flag = true;
+                }
+            }
+
+            t = res.Clone() as Point3d;
+            return flag;
+        }
+
+        public override Vector normal(Point3d p)
+        {
+            foreach (var face in ph.Faces)
+            {
+                double square = 0;
+                int cnt = face.Edges.Count();
+                for (int i = 0; i < cnt; ++i)
+                    square += triangle_square(face.Edges[i].First, face.Edges[(i + 1) % cnt].First, p);
+                if (Math.Abs(squares[face] - square) > eps)
+                    continue;
+
+                var p1 = face.Edges[0].First;
+                var p2 = face.Edges[1].First;
+                var p3 = face.Edges[2].First;
+                Vector v1 = new Vector(p1, p2);
+                Vector v2 = new Vector(p1, p3);
+                return v1[v2];
+            }
+            return new Vector();
+        }
+    }
 }
