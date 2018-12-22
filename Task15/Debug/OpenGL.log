@@ -1,0 +1,6 @@
+﻿  main3.cpp
+c:\users\mozdo\desktop\графика всякая\task15\main3.cpp(17): warning C4305: инициализация: усечение из "double" в "float"
+c:\users\mozdo\desktop\графика всякая\task15\main3.cpp(325): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\mozdo\desktop\графика всякая\task15\main3.cpp(326): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\mozdo\desktop\графика всякая\task15\main3.cpp(327): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  OpenGL.vcxproj -> C:\Users\mozdo\Desktop\Графика всякая\Task15\Debug\OpenGL.exe
